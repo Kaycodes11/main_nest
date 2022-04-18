@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { APP_FILTER, APP_GUARD, APP_PIPE, APP_INTERCEPTOR } from '@nestjs/core';
+import * as redisStore from 'cache-manager-redis-store';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeesModule } from './coffees/coffees.module';
@@ -12,7 +13,10 @@ import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
-    // ConfigModule.forRoot({ isGlobal: true }),
+    CacheModule.register({
+      store: redisStore,
+      socket: { host: 'locahost', port: 6379 },
+    }),
     ConfigModule.forRoot({ load: [appConfig] }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
@@ -32,6 +36,9 @@ import { CommonModule } from './common/common.module';
     // DatabaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
+  ],
 })
 export class AppModule {}
