@@ -8,9 +8,14 @@ import {
   Post,
   Put,
   Query,
+  SetMetadata,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { resolve } from 'path';
+import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
+import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
@@ -21,14 +26,23 @@ import { PaginationQueryDto } from './dto/pagination-query.dto';
 export class CoffeesController {
   constructor(private readonly coffeeService: CoffeesService) {}
 
-  @UsePipes(ValidationPipe)
+  // Build generic guard/inerteceptors by usling SetMetaData  like below
+
+  // @UsePipes(ValidationPipe)
+  // @SetMetadata('isPublic', true)
+  @Public()
   @Get()
-  findAll(@Query() paginationQuery: PaginationQueryDto) {
+  async findAll(
+    @Protocol('https') prtocol: string,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    console.log(prtocol);
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     return this.coffeeService.findAll(paginationQuery);
   }
 
   // @Get(':id')
-  // findOne(@Param('id') id: number) {
+  // findOne(@Param('id', ParseIntPipe) id: number) {
   //   return this.coffeeService.findOne(' ' + id);
   // }
 

@@ -15,7 +15,7 @@ export class HttpExceptionFilter<T extends HttpException>
     const response = ctx.getResponse<Response>(); // get the current request
 
     const status = exception.getStatus();
-    // console.log(`STATUS`, status);
+    console.log(`STATUS`, status);
 
     const exceptionResponse = exception.getResponse();
     const error =
