@@ -11,6 +11,8 @@ import appConfig from './config/app.config';
 // import { DatabaseModule } from './database/database.module';
 import { CommonModule } from './common/common.module';
 import { ChatGateway } from 'chat.gateway';
+import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { ChatGateway } from 'chat.gateway';
     CoffeeRatingModule,
     CommonModule,
     // DatabaseModule,
+    ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [
