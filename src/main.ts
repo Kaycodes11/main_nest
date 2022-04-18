@@ -7,12 +7,12 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // When request body uses dto; then extra/unwanted properties will be removed from response
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -38,6 +38,8 @@ async function bootstrap() {
   };
 
   SwaggerModule.setup('api', app, document, customOptions);
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(3000);
 }
