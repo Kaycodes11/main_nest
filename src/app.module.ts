@@ -15,7 +15,7 @@ import { CommonModule } from './common/common.module';
   imports: [
     CacheModule.register({
       store: redisStore,
-      socket: { host: 'locahost', port: 6379 },
+      socket: { host: 'localhost', port: 6379 },
     }),
     ConfigModule.forRoot({ load: [appConfig] }),
     TypeOrmModule.forRootAsync({
