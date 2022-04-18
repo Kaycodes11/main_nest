@@ -16,6 +16,7 @@ import { resolve } from 'path';
 import { Protocol } from 'src/common/decorators/protocol.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
 import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
+
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
@@ -31,6 +32,7 @@ export class CoffeesController {
   // @UsePipes(ValidationPipe)
   // @SetMetadata('isPublic', true)
   @Public()
+  @UsePipes(ValidationPipe)
   @Get()
   async findAll(
     @Protocol('https') prtocol: string,
@@ -43,6 +45,7 @@ export class CoffeesController {
 
   // @Get(':id')
   // findOne(@Param('id', ParseIntPipe) id: number) {
+  // findOne(@Param('id') id: number) {
   //   return this.coffeeService.findOne(' ' + id);
   // }
 
