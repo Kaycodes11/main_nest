@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService, ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from 'src/events/entities/event.entity';
@@ -46,22 +46,27 @@ export class CoffeesService {
     });
   }
   // async findOne(id: string) {
-  // const coffee = await this.coffeeRepo.findOne(id, {relations: ['flavors']});
+  //   const coffee = await this.coffeeRepo.findOne(id, {
+  //     relations: ['Flavors'],
+  //   });
   //   if (!coffee) {
   //     throw new NotFoundException(`coffee #${id} not found`);
   //   }
   //   return coffee;
   // }
-  // create(coffeeDto: any) {
-  //   const coffee = this.coffeeRepo.create(coffeeDto);
-  //   return this.coffeeRepo.save(coffee);
-  // }
-  // async update(id? : string, updateCoffeeDto?: any) {
+  create(coffeeDto: any) {
+    const coffee = this.coffeeRepo.create(coffeeDto);
+    return this.coffeeRepo.save(coffee);
+  }
+  // async update(id?: string, updateCoffeeDto?: any) {
   //   const coffee = await this.coffeeRepo.preload({
-  //     id: +id, ...updateCoffeeDto
-  //   })
-  // if(!coffee) {throw new NotFoundException(`update error`)}
-  // return this.coffeeRepo.save(coffee);
+  //     id: +id,
+  //     ...updateCoffeeDto,
+  //   });
+  //   if (!coffee) {
+  //     throw new NotFoundException(`update error`);
+  //   }
+  //   return this.coffeeRepo.save(coffee);
   // }
   // async remove(id?: string) {
   //   const coffee = await this.coffeeRepo.findOne(id);
