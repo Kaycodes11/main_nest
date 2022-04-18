@@ -6,6 +6,7 @@ import { Connection, Repository } from 'typeorm';
 import { COFFEE_BRANDS } from './coffees.constants';
 import coffeesConfig from './config/coffees.config';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entity/coffee.entity';
 import { Flavors } from './entity/flavors.entity';
 
@@ -58,16 +59,16 @@ export class CoffeesService {
     const coffee = this.coffeeRepo.create(coffeeDto);
     return this.coffeeRepo.save(coffee);
   }
-  // async update(id?: string, updateCoffeeDto?: any) {
-  //   const coffee = await this.coffeeRepo.preload({
-  //     id: +id,
-  //     ...updateCoffeeDto,
-  //   });
-  //   if (!coffee) {
-  //     throw new NotFoundException(`update error`);
-  //   }
-  //   return this.coffeeRepo.save(coffee);
-  // }
+  async update(id?: string, updateCoffeeDto?: UpdateCoffeeDto) {
+    const coffee = await this.coffeeRepo.preload({
+      id: +id,
+      ...updateCoffeeDto,
+    });
+    if (!coffee) {
+      throw new NotFoundException(`update error`);
+    }
+    return this.coffeeRepo.save(coffee);
+  }
   // async remove(id?: string) {
   //   const coffee = await this.coffeeRepo.findOne(id);
   //   return this.coffeeRepo.remove(coffee);
