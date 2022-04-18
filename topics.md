@@ -10,6 +10,16 @@
 
 # making a new guard : nest g guard common/guards/api-key (whether the route is accessible by ther user or not)
 
+# making a new decorator : nest g decorator common/decorators/public
+
+# making a new interceptor: nest g class interceptor common/interceptors/wrap-response.interceptor
+
+# making a new pipe: nest g pipe common/pipes/parse-int
+
+# making a new middleware: nest g middleware common/middleware/logging
+
+# make a new module for a existing folder: nest g module common
+
 # handling payment and streaming
 
 # nestjs caching (in-memory with redis)

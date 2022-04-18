@@ -7,7 +7,6 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -39,7 +38,13 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document, customOptions);
 
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalGuards(new ApiKeyGuard());
+  // app.useGlobalInterceptors(
+  //   new WrapResponseInterceptor(),
+  //   new TimeoutInterceptor(),
+  // );
+  // app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(3000);
 }
