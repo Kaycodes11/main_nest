@@ -1,51 +1,68 @@
-import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-// import { APP_FILTER, APP_GUARD, APP_PIPE, APP_INTERCEPTOR } from '@nestjs/core';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import * as redisStore from 'cache-manager-redis-store';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CoffeesModule } from './coffees/coffees.module';
-import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
-// import { DatabaseModule } from './database/database.module';
-import { CommonModule } from './common/common.module';
-import { ChatGateway } from 'chat.gateway';
-import { ScheduleModule } from '@nestjs/schedule';
-import { EventEmitterModule } from '@nestjs/event-emitter';
+import { KnexModule } from 'nest-knexjs';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { UsersModule } from './users/users.module';
+import { UsersHttpModule } from './users-http/users-http.module';
+import { PhotosModule } from './photos/photos.module';
+import { InterviewsModule } from './interviews/interviews.module';
 
 @Module({
   imports: [
-    CacheModule.register({
-      store: redisStore,
-      socket: { host: 'localhost', port: 6379 },
+    ConfigModule.forRoot({
+      load: [appConfig],
+      isGlobal: true,
+      cache: true,
     }),
-    ConfigModule.forRoot({ load: [appConfig] }),
-    TypeOrmModule.forRootAsync({
+    KnexModule.forRoot({
+      config: {
+        client: 'postgresql',
+        version: '14.2',
+        useNullAsDefault: true,
+        connection: {
+          host: '127.0.0.1',
+          user: 'postgres',
+          password: '123456',
+          database: 'recruitmentv2',
+        },
+      },
+    }),
+    // now this "forRoot" is synchronous so the main thread will be blocked until this is done,
+    // therefore, other modules after and subsequent code it e.g., UsersModule will have to wait
+    // SequelizeModule.forRoot({
+    //     dialect: 'postgres',
+    //     host: 'localhost',
+    //     port: 5432,
+    //     username: 'postgres',
+    //     password: '123456',
+    //     database: 'recruitmentv2',
+    //     // models: [UserModel, PhotoModel], // no need for this when forFeature + autoLoadModels
+    //     logging: true,
+    //     autoLoadModels: true,
+    //     synchronize: true,
+    // }),
+    SequelizeModule.forRootAsync({
       useFactory: () => ({
-        type: 'postgres',
-        host: process.env.DB_HOST,
-        port: +process.env.DB_PORT,
-        username: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME,
-        autoLoadEntities: true,
+        dialect: 'postgres',
+        host: 'localhost',
+        port: 5432,
+        username: 'postgres',
+        password: '123456',
+        database: 'recruitmentv2',
+        logging: true,
+        autoLoadModels: true,
         synchronize: true,
       }),
     }),
-    CoffeesModule,
-    CoffeeRatingModule,
-    CommonModule,
-    // DatabaseModule,
-    ScheduleModule.forRoot(),
-    EventEmitterModule.forRoot(),
+    UsersModule,
+    UsersHttpModule,
+    PhotosModule,
+    InterviewsModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
-    ChatGateway,
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
