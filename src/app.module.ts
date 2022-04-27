@@ -14,6 +14,10 @@ import { CommonModule } from './common/common.module';
 import { ChatGateway } from 'chat.gateway';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { Connection } from 'typeorm';
+import { UsersModule } from './users/users.module';
+import { UserHttpModule } from './user-http/user-http.module';
+import { PhotoModule } from './photo/photo.module';
 
 @Module({
   imports: [
@@ -32,6 +36,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
         database: process.env.DB_NAME,
         autoLoadEntities: true,
         synchronize: true,
+        retryAttempts: 4,
       }),
     }),
     CoffeesModule,
@@ -40,6 +45,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     // DatabaseModule,
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
+    UsersModule,
+    UserHttpModule,
+    PhotoModule,
   ],
   controllers: [AppController],
   providers: [
@@ -48,4 +56,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     ChatGateway,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private connection: Connection) {}
+}
