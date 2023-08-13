@@ -15,6 +15,8 @@ import { LoggingMiddleware } from './middleware/logging.middleware';
 })
 export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    // so here add a global middleware that can apply to all routes or specific routes
+
     consumer.apply(LoggingMiddleware).forRoutes('*'); // for all and any routes
     // consumer.apply(LoggingMiddleware).exclude('coffees').forRoutes('*'); // for all and any routes without coffees
     // consumer.apply(LoggingMiddleware).forRoutes('coffees'); // for just coffees routes

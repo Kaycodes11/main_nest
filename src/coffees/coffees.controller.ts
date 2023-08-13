@@ -1,21 +1,17 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
   Post,
-  Put,
   Query,
-  SetMetadata,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 import { Protocol } from 'src/common/decorators/protocol.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
-import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
@@ -28,7 +24,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 export class CoffeesController {
   constructor(private readonly coffeeService: CoffeesService) {}
 
-  // Build generic guard/inerteceptors by usling SetMetaData  like below
+  // Build generic guard/interceptors by using SetMetaData like below
 
   // @UsePipes(ValidationPipe)
   // @SetMetadata('isPublic', true)

@@ -9,7 +9,9 @@ import {
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule); // same as app = express() in node
+
+  // so now global middlewares can be applied to app e.g. app.use()
 
   // When request body uses dto; then extra/unwanted properties will be removed from response
   app.useGlobalPipes(
@@ -21,12 +23,14 @@ async function bootstrap() {
     }),
   );
 
+  // Swagger config
   const config = new DocumentBuilder()
     .setTitle('Cats example')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .addTag('cats')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
 
   const customOptions: SwaggerCustomOptions = {

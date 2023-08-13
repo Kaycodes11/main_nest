@@ -1,15 +1,14 @@
 import { Injectable, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { async } from 'rxjs';
 import { Event } from 'src/events/entities/event.entity';
-import { Connection } from 'typeorm';
 import { COFFEE_BRANDS } from './coffees.constants';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import coffeesConfig from './config/coffees.config';
 import { Coffee } from './entity/coffee.entity';
 import { Flavors } from './entity/flavors.entity';
+import { Connection } from "typeorm";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class ConfigService {}
@@ -22,7 +21,7 @@ class MockConfigForProduction {}
 export class CoffeeBrandsFactory {
   create() {
     // do something
-    return ['RAGE', 'NESCAGE'];
+    return ['RAGE', 'NESCAFE'];
   }
 }
 
@@ -35,11 +34,12 @@ export class CoffeeBrandsFactory {
   providers: [
     CoffeesService,
     CoffeeBrandsFactory,
-    // { provide: COFFEE_BRANDS, useValue: ['rage', 'nescage'] },
+    // { provide: COFFEE_BRANDS, useValue: ['rage', 'nescafe'] },
     {
       provide: COFFEE_BRANDS,
-      useFactory: (brandsFactory: CoffeeBrandsFactory) =>
-        brandsFactory.create() || ['Rage', 'Nescafe'],
+      useFactory: (brandsFactory: CoffeeBrandsFactory) => {
+        return brandsFactory.create() || ['Rage', 'Nescafe'];
+      },
       inject: [CoffeeBrandsFactory],
     },
     {
