@@ -8,7 +8,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { UsersHttpModule } from './users-http/users-http.module';
 import { PhotosModule } from './photos/photos.module';
-import { InterviewsModule } from './interviews/interviews.module';
 
 @Module({
   imports: [
@@ -60,7 +59,6 @@ import { InterviewsModule } from './interviews/interviews.module';
     UsersModule,
     UsersHttpModule,
     PhotosModule,
-    InterviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
