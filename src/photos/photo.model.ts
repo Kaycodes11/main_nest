@@ -1,4 +1,5 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { UserModel } from 'src/users/user.model';
 
 @Table
 export class PhotoModel extends Model {
@@ -7,4 +8,12 @@ export class PhotoModel extends Model {
 
   @Column
   meta: string;
+
+  @ForeignKey(() => UserModel)
+  @Column(DataType.UUID)
+  userId: string;
+
+
+  @BelongsTo(() => UserModel, 'userId')
+  user: UserModel
 }
