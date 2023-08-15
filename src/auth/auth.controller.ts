@@ -11,7 +11,7 @@ export class AuthController {
   async registerWithEmailAndPassword(@Req() req: Request, @Res() res: Response): Promise<void> {
     try {
       await this.authService.registerWithEmailAndPassword(req.body);
-      console.log('debugging');
+
       res.json({
         message: 'Registration successful, kindly check your email for confirmation link',
       });

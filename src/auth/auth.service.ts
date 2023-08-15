@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserModel } from 'src/users/user.model';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from './../mail/mail.service';
 
 interface LoginToken {
   accessToken: string;
@@ -31,17 +31,22 @@ export class AuthService {
   }
 
   async registerWithEmailAndPassword(userMap: Record<string, any>): Promise<void> {
-    console.log(userMap);
     const isUser = await this.doesUserAlreadyExist(userMap.email);
     if (isUser) throw new HttpException('Duplicate signup', HttpStatus.CONFLICT);
 
     const user = await this.userModel.create(userMap);
     // await user.save();
-    // console.log('registered successfully', user.toJSON());
+    const savedUser = user.toJSON();
 
     const randomToken = Math.floor(1000 + Math.random() * 9000).toString();
+
     //  now send the confirmation email
-    await this.mailService.sendUserConfirmationMail(user.toJSON(), randomToken);
+    if (savedUser) {
+      console.log('savedUser: ', savedUser);
+      const confirmUser = { email: savedUser.email, firstName: savedUser.firstName };
+      await this.mailService.sendUserConfirmationMail(confirmUser, randomToken);
+      console.log('confirmation mail has been sent');
+    }
   }
 
   async generateTokenWhenLogin<T extends { id: string; email: string } = any>({ id, email }: T): Promise<LoginToken> {
@@ -68,7 +73,6 @@ export class AuthService {
     // TODO: password validation
 
     const isPassword = await bcrypt.compare(password, user.password);
-    console.log('isPassword', isPassword);
 
     if (!isPassword) throw new HttpException('Mismatched password', HttpStatus.BAD_REQUEST);
 
