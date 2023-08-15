@@ -13,8 +13,8 @@ export class MailService {
       to: user.email,
       from: '"Support Team" <support@example.com>', // override default from mail.module.ts
       subject: 'Welcome to Nice App! Confirm your Email',
-      html: 'just send the confirmation mail ',
-      // template: './confirmation',
+      // html: 'just send the confirmation mail ',
+      template: './confirmation',
       // template: path.join(__dirname, './templates', 'confirmation'), // `.hbs` extension is appended automatically
       context: {
         // ✏️ filling curly brackets with content

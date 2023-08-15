@@ -5,7 +5,7 @@ import * as path from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
 
-// @Global() :  if this decorator used; then no need import within app.module
+// @Global() :  if this decorator used; then just import it just once within app.module.ts then inject anywhere (without needing to import)
 
 @Module({
   imports: [
@@ -15,15 +15,15 @@ import { MailerModule } from '@nestjs-modules/mailer';
         console.log('folder: ', path.join(__dirname, 'templates'));
         return {
           transport: {
-            host: config.get('sandbox.smtp.mailtrap.io'),
-            port: config.get('2525'),
+            host: config.get('MAIL_HOST'),
+            port: +config.get<number>('MAIL_PORT'),
             secure: false,
             auth: {
-              user: config.get('b91e2f7af858f2'),
-              pass: config.get('a3ebc2267fd2cc'),
+              user: config.get('MAIL_USER'),
+              pass: config.get('MAIL_PASSWORD'),
             },
           },
-          defaults: { from: '"No Reply" <noreply@example.com>' },
+          defaults: { from: `"No Reply" <${config.get('MAIL_FROM')}>` },
           template: {
             dir: path.join(__dirname, 'templates'),
             adapter: new HandlebarsAdapter(),
