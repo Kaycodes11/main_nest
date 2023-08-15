@@ -13,8 +13,7 @@ export class UsersService {
     @InjectConnection() private readonly knex: Knex,
     @InjectModel(UserModel) private userModel: typeof UserModel,
     private sequelize: Sequelize,
-  ) {
-  }
+  ) {}
 
   async createMany() {
     try {
@@ -30,6 +29,7 @@ export class UsersService {
     }
   }
 
+  // for knex
   async findAll() {
     const users = await this.knex.table('users');
     return { users };
@@ -39,6 +39,7 @@ export class UsersService {
     return this.userModel.findAll();
   }
 
+  // for knex
   async create(createUserDto: CreateUserDto) {
     try {
       const users = await this.knex.table('users').insert({
@@ -55,6 +56,7 @@ export class UsersService {
     }
   }
 
+  // for knex
   async findOne(id: number) {
     if (!id) {
       throw new NotFoundException(`User ${id} does not exist`);
@@ -65,6 +67,7 @@ export class UsersService {
     };
   }
 
+  // for knex
   async findOneBySequelize(id: number): Promise<UserModel> {
     return this.userModel.findOne({
       where: {
@@ -73,6 +76,7 @@ export class UsersService {
     });
   }
 
+  // for knex
   async update(id: number, updateUserDto: UpdateUserDto) {
     try {
       const users = await this.knex.table('users').where('id', id).update({
@@ -88,6 +92,7 @@ export class UsersService {
     }
   }
 
+  // for knex
   async remove(id: number) {
     if (!id) {
       throw new NotFoundException(`User ${id} does not exist`);

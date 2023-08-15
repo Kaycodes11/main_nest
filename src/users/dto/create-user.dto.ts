@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-// dto is simply an object & validate and transform "request object"
+// dto used validate & transform "request object"
 export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
@@ -14,4 +14,16 @@ export class CreateUserDto {
   @IsString()
   @IsEmail()
   email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  gender: string;
+
+  @IsNotEmpty()
+  @IsString()
+  mobile: string;
 }

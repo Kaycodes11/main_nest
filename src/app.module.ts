@@ -9,6 +9,8 @@ import { UsersModule } from './users/users.module';
 import { UsersHttpModule } from './users-http/users-http.module';
 import { PhotosModule } from './photos/photos.module';
 import { InterviewsModule } from './interviews/interviews.module';
+import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -61,6 +63,8 @@ import { InterviewsModule } from './interviews/interviews.module';
     UsersHttpModule,
     PhotosModule,
     InterviewsModule,
+    AuthModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

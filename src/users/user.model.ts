@@ -22,10 +22,9 @@ type Gender = 'male' | 'female' | 'others';
 
 @Table({ modelName: 'User', paranoid: true })
 export class UserModel extends Model {
-  @IsUUID('4')
-  @AllowNull(false)
+  @IsUUID(4)
   @PrimaryKey
-  @Column(DataType.UUID)
+  @Column({ defaultValue: DataType.UUIDV4 })
   id: string;
 
   @Length({ min: 4 })
@@ -53,10 +52,14 @@ export class UserModel extends Model {
   @Column
   email: string;
 
+  @AllowNull(false)
   @Column({
-    allowNull: false,
+    type: DataType.STRING,
     set(value: string) {
-      this.setDataValue('password', bcrypt.hash(value, 12));
+      // console.log('password beforeHash: ', value);
+      const hashedPass = bcrypt.hashSync(value, 12);
+      this.setDataValue('password', hashedPass);
+      // console.log('hashed: ', this.getDataValue('password'), typeof this.getDataValue('password'));
     },
   })
   password: string;
