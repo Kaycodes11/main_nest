@@ -16,6 +16,7 @@ import { PhotoModel } from '../photos/photo.model';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from './userRole.model';
 import { RoleModel } from './role.model';
+import { InterviewQuestionModel } from 'src/interviews/interviewQuestion.model';
 
 type Gender = 'male' | 'female' | 'others';
 
@@ -68,12 +69,13 @@ export class UserModel extends Model {
   @Column({ defaultValue: '+00 00000 00000' })
   mobile: string;
 
-  // Here source table is UserModel and target table is PhotoModel
   // One User hasMany Photo (s):
-  // so here it will create a foreignKey colum 'userId' on the target table i.e. PhotoModel by referencing source table (UserModel).id
-  // by default foreignKey will refer to source table's id, but it could be some other colum but that must be unique
   @HasMany(() => PhotoModel, { foreignKey: 'userId' })
   photos: PhotoModel[];
+
+  // One User (or Interviewee) hasMany InterviewQuestion (s)
+  @HasMany(() => InterviewQuestionModel, { foreignKey: 'acceptedBy' })
+  interviewQuestions: InterviewQuestionModel[];
 
   // One User hasMany Role (s), {through: UserRole}
   @BelongsToMany(() => RoleModel, () => UserRole)
