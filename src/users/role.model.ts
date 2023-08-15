@@ -1,8 +1,10 @@
 import { AllowNull, BelongsToMany, Column, DataType, IsUUID, Model, PrimaryKey, Table } from 'sequelize-typescript';
 import { UserModel } from './user.model';
 import { UserRole } from './userRole.model';
+// import { PrivilegeModel } from './privilege.model';
+// import { RolesPrivilegeModel } from './rolesPrivilege.model';
 
-@Table({modelName: 'Role', timestamps: false})
+@Table({ modelName: 'Role', timestamps: false })
 export class RoleModel extends Model {
   @IsUUID('4')
   @AllowNull(false)

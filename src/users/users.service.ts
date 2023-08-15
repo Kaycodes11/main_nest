@@ -13,7 +13,8 @@ export class UsersService {
     @InjectConnection() private readonly knex: Knex,
     @InjectModel(UserModel) private userModel: typeof UserModel,
     private sequelize: Sequelize,
-  ) {}
+  ) {
+  }
 
   async createMany() {
     try {

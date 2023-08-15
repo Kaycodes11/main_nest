@@ -18,6 +18,7 @@ import { UserRole } from './userRole.model';
 import { RoleModel } from './role.model';
 
 type Gender = 'male' | 'female' | 'others';
+
 @Table({ modelName: 'User', paranoid: true })
 export class UserModel extends Model {
   @IsUUID('4')
