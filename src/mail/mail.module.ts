@@ -11,16 +11,21 @@ import { MailerModule } from '@nestjs-modules/mailer';
   imports: [
     MailerModule.forRootAsync({
       useFactory: async (config: ConfigService) => {
-        console.log('MAIL MODULE: ', config.get('MAIL_HOST'), config.get('MAIL_PORT'));
-        console.log('folder: ', path.join(__dirname, 'templates'));
+        const configMap = {
+          host: config.get('MAIL_HOST'),
+          port: +config.get<number>('MAIL_PORT') || 2525,
+          user: config.get('MAIL_USER'),
+          pass: config.get('MAIL_PASSWORD'),
+        };
+
         return {
           transport: {
-            host: config.get('MAIL_HOST'),
-            port: +config.get<number>('MAIL_PORT'),
+            host: configMap.host,
+            port: configMap.port,
             secure: false,
             auth: {
-              user: config.get('MAIL_USER'),
-              pass: config.get('MAIL_PASSWORD'),
+              user: configMap.user,
+              pass: configMap.pass,
             },
           },
           defaults: { from: `"No Reply" <${config.get('MAIL_FROM')}>` },

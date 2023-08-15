@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Body, Post, Req, Res } from '@nestjs/common';
+import { Controller, UseGuards, Body, Post, Req, Res, Patch, HttpCode, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -31,6 +31,17 @@ export class AuthController {
       res.status(200).json({ accessToken, isTermsAndConditionsAccepted });
     } catch (e) {
       console.log(e.message);
+      res.status(e?.status || 500).json({ message: e?.message || 'Unable to process your request' });
+    }
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch('forgot-password')
+  async forgotPassword(@Req() req: Request, @Res() res: Response): Promise<void> {
+    try {
+      await this.authService.forgotPassword({ email: req.body.email });
+      res.json({ message: 'Password has reset successfully' });
+    } catch (e) {
       res.status(e?.status || 500).json({ message: e?.message || 'Unable to process your request' });
     }
   }

@@ -12,7 +12,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: user.email,
       from: '"Support Team" <support@example.com>', // override default from mail.module.ts
-      subject: 'Welcome to Nice App! Confirm your Email',
+      subject: 'Hello Interviewee! Kindly, confirm your Email',
       // html: 'just send the confirmation mail ',
       template: './confirmation',
       // template: path.join(__dirname, './templates', 'confirmation'), // `.hbs` extension is appended automatically
@@ -23,13 +23,15 @@ export class MailService {
       },
     });
   }
-  async resetPassword(user: any, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
+  async forgotPassword(user: { email: string; firstName: string }, token: string) {
+    console.log('forgot password: ', user);
+    const url = `example.com/auth/reset?token=${token}`;
+
     await this.mailerService.sendMail({
       to: user.email,
       from: '"Support Team" <support@example.com>', // override default from mail.module.ts
-      subject: 'Welcome to Nice App! Here Reset your Password',
-      template: 'reset-password',
+      subject: 'Hello, Interviewee! Here Reset your Password',
+      template: './reset-password',
       context: {
         name: user.firstName,
         url,

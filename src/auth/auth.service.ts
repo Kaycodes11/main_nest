@@ -70,8 +70,6 @@ export class AuthService {
     });
     if (!user) throw new HttpException('No user has found', HttpStatus.CONFLICT);
 
-    // TODO: password validation
-
     const isPassword = await bcrypt.compare(password, user.password);
 
     if (!isPassword) throw new HttpException('Mismatched password', HttpStatus.BAD_REQUEST);
@@ -80,10 +78,16 @@ export class AuthService {
   }
 
   async forgotPassword({ email }: { email: string }): Promise<void> {
-    const user = await this.doesUserAlreadyExist(email);
+    console.log('EMAIL: ', email);
+    const user: any = await this.userModel.findOne({ where: { email } });
     if (!user) throw new HttpException('No Such user exist', HttpStatus.BAD_REQUEST);
+
     const randomToken = Math.floor(1000 + Math.random() * 9000).toString();
-    //  now then send a mail with the instruction to follow to reset password/set a new password
-    await this.mailService.resetPassword(user, randomToken);
+
+    if (user.toJSON()) {
+      //  now then send a mail with the instruction to follow to reset password/set a new password
+      await this.mailService.forgotPassword(user, randomToken);
+      console.log('password has been reset');
+    }
   }
 }
