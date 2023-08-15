@@ -3,8 +3,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { InterviewModel } from './interview.model';
 import { InterviewDetailModel } from './interviewDetail.model';
 import { InterviewQuestionModel } from './interviewQuestion.model';
-import { InterviewScheduleModel } from './interviewSchedule';
-import { InterviewStatusModel } from './interview-status.model';
+import { InterviewScheduleModel } from './interviewSchedule.model';
+import { InterviewStatusModel } from './interviewStatus.model';
 
 @Module({
   imports: [

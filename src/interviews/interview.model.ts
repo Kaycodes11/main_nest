@@ -12,7 +12,7 @@ import {
 } from 'sequelize-typescript';
 import { InterviewDetailModel } from './interviewDetail.model';
 import { InterviewQuestionModel } from './interviewQuestion.model';
-import { InterviewScheduleModel } from './interviewSchedule';
+import { InterviewScheduleModel } from './interviewSchedule.model';
 
 // type Priority = 'high' | 'medium' | 'low' | string;
 
