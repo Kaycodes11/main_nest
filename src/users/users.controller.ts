@@ -5,14 +5,10 @@ import { UpdateUserDto } from './dto/update-user-dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {
-  }
+  constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
+  // Roles([1, 2]) 1 = HR, 2 = Interviewer
+  // so "Roles" decorator will take the token from and see if the user has one of roles; if not throw error
   @Get()
   findAll() {
     return this.usersService.findAll();

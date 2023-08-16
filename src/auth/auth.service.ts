@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/sequelize';
@@ -88,7 +88,7 @@ export class AuthService {
         email,
       },
     });
-    if (!user) throw new HttpException('No user has found', HttpStatus.CONFLICT);
+    if (!user) throw new UnauthorizedException();
 
     const isPassword = await bcrypt.compare(password, user.password);
 

@@ -13,6 +13,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    // 1. lookup to database to add more info onto return value (that will be added to req.user = return value)
+    // 2. invalidating tokens or token revocation
     return { id: payload.id, email: payload.email };
   }
 }
