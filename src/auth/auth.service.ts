@@ -38,15 +38,35 @@ export class AuthService {
     // await user.save();
     const savedUser = user.toJSON();
 
-    const randomToken = Math.floor(1000 + Math.random() * 9000).toString();
+    // const randomToken = Math.floor(1000 + Math.random() * 9000).toString();
 
     //  now send the confirmation email
     if (savedUser) {
-      console.log('savedUser: ', savedUser);
       const confirmUser = { email: savedUser.email, firstName: savedUser.firstName };
-      await this.mailService.sendUserConfirmationMail(confirmUser, randomToken);
-      console.log('confirmation mail has been sent');
+      const token = this.jwtService.sign(confirmUser, {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '5m',
+      });
+      await this.mailService.sendUserConfirmationMail(confirmUser, token);
     }
+  }
+
+  async verifyTheRegisteredUser(token: string): Promise<void> {
+    // decode just validate the token whereas verify decode token the after verifying the signature from token
+    const validatedUser = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+
+    // does this user exist within db ?
+    const user = await this.doesUserAlreadyExist(validatedUser.email);
+
+    if (!user) throw new HttpException('No such user exist', HttpStatus.BAD_REQUEST);
+
+    // make sure that this user is not already verified; if does then throw error
+    if (await this.userModel.findOne({ where: { email: validatedUser.email, isVerified: true } })) {
+      throw new HttpException('Already verified', HttpStatus.BAD_REQUEST);
+    }
+
+    // otherwise, run an update query on UserModel (i.e. User Table) and makes isVerified: true
+    await this.userModel.update({ isVerified: true }, { where: { email: validatedUser.email } });
   }
 
   async generateTokenWhenLogin<T extends { id: string; email: string } = any>({ id, email }: T): Promise<LoginToken> {
@@ -78,16 +98,37 @@ export class AuthService {
   }
 
   async forgotPassword({ email }: { email: string }): Promise<void> {
-    console.log('EMAIL: ', email);
-    const user: any = await this.userModel.findOne({ where: { email } });
-    if (!user) throw new HttpException('No Such user exist', HttpStatus.BAD_REQUEST);
+    // just in case if there's null value from db then => null?.toJSON() = undefined
+    const user: any = (await this.userModel.findOne({ where: { email } }))?.toJSON();
 
-    const randomToken = Math.floor(1000 + Math.random() * 9000).toString();
+    if (!user) throw new HttpException('No such user exist', HttpStatus.BAD_REQUEST);
 
-    if (user.toJSON()) {
+    // const randomToken = Math.floor(1000 + Math.random() * 9000).toString();
+
+    if (Object.keys(user).length) {
+      const token = this.jwtService.sign(
+        { email: user.email, firstName: user.firstName },
+        {
+          secret: process.env.JWT_SECRET,
+          expiresIn: '5m',
+        },
+      );
       //  now then send a mail with the instruction to follow to reset password/set a new password
-      await this.mailService.forgotPassword(user, randomToken);
-      console.log('password has been reset');
+      await this.mailService.forgotPassword(user, token);
     }
+  }
+
+  async resetPassword(token: string, password: string): Promise<void> {
+    // decode just validate the token whereas verify decode token the after verifying the signature from token
+    const validatedUser = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+
+    // does this user exist within db ? if not throw error
+
+    if (!(await this.doesUserAlreadyExist(validatedUser.email))) {
+      throw new HttpException('No such user exist', HttpStatus.BAD_REQUEST);
+    }
+
+    // otherwise run an update query on UserModel (i.e. User Table) and makes isVerified: true
+    await this.userModel.update({ password }, { where: { email: validatedUser.email } });
   }
 }

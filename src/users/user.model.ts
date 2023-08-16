@@ -1,5 +1,6 @@
 import {
   AllowNull,
+  BeforeUpdate,
   BelongsToMany,
   Column,
   DataType,
@@ -56,7 +57,7 @@ export class UserModel extends Model {
   @Column({
     type: DataType.STRING,
     set(value: string) {
-      // console.log('password beforeHash: ', value);
+      // this setter will run whenever this model's instance doing crud and so no need to use hooks to hash
       const hashedPass = bcrypt.hashSync(value, 12);
       this.setDataValue('password', hashedPass);
       // console.log('hashed: ', this.getDataValue('password'), typeof this.getDataValue('password'));
@@ -71,6 +72,15 @@ export class UserModel extends Model {
 
   @Column({ defaultValue: '+00 00000 00000' })
   mobile: string;
+
+  @Column({ defaultValue: false })
+  isVerified: boolean;
+
+  @BeforeUpdate
+  static hashPasswordAtUpdate(instance: UserModel) {
+    // this will be called whenever an (injected) instance is used/called
+    // instance.password =
+  }
 
   // One User hasMany Photo (s):
   @HasMany(() => PhotoModel, { foreignKey: 'userId' })

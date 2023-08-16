@@ -38,8 +38,6 @@ async function bootstrap() {
   const logger: Logger = new Logger();
   const PORT = +configService.get<number>('PORT') || 8080;
 
-  // console.log(process.env.NODE_ENV); // undefined
-
   await app.listen(8080, () => {
     process.env.NODE_ENV === 'development' && logger.log(`Application hosted on http://localhost:${PORT}`);
   });

@@ -5,6 +5,8 @@ import { InterviewDetailModel } from './interviewDetail.model';
 import { InterviewQuestionModel } from './interviewQuestion.model';
 import { InterviewScheduleModel } from './interviewSchedule.model';
 import { InterviewStatusModel } from './interviewStatus.model';
+import { InterviewsController } from './interviews.controller';
+import { InterviewsService } from './interviews.service';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { InterviewStatusModel } from './interviewStatus.model';
       InterviewStatusModel,
     ]),
   ],
+  controllers: [InterviewsController],
+  providers: [InterviewsService],
   exports: [SequelizeModule],
 })
 export class InterviewsModule {}
