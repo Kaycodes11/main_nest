@@ -4,7 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.createTable('UserRoles', {
-      userId: {
+      UserId: {
         type: Sequelize.DataTypes.UUID,
         references: {
           model: {
@@ -20,7 +20,7 @@ module.exports = {
         // onUpdate: 'SET NULL'
       },
 
-      roleId: {
+      RoleId: {
         type: Sequelize.DataTypes.UUID,
         references: {
           model: {

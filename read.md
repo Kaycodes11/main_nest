@@ -37,5 +37,14 @@ https://fig.io/manual/sequelize/db:migrate:undo:all
 
 # npx sequelize-cli db:migrate:status (check status of migrations)
 
+#### seeding
+
+create seed : npx sequelize-cli seed:generate --name seed-roles
+
+
+npx sequelize db:seed --name 20230817044713-create-userRole.js (specific seed)
+
+
+seed all : npx sequelize-cli db:seed:all ( all seeds )
 
 https://dev.to/anayooleru/modifying-an-existing-sequelize-migration-1mnn

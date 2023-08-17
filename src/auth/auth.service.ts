@@ -4,6 +4,10 @@ import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserModel } from 'src/users/user.model';
 import { MailService } from './../mail/mail.service';
+import { UserRole } from 'src/users/userRole.model';
+import { RoleModel } from 'src/users/role.model';
+import { Op } from 'sequelize';
+import { DEFAULT_ROLE } from './constant';
 
 interface LoginToken {
   accessToken: string;
@@ -17,6 +21,8 @@ interface LoginToken {
 export class AuthService {
   constructor(
     @InjectModel(UserModel) private userModel: typeof UserModel,
+    @InjectModel(RoleModel) private roleModel: typeof RoleModel,
+    @InjectModel(UserRole) private userRolesModel: typeof UserRole,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {}
@@ -42,7 +48,7 @@ export class AuthService {
 
     //  now send the confirmation email
     if (savedUser) {
-      const confirmUser = { email: savedUser.email, firstName: savedUser.firstName };
+      const confirmUser = { id: savedUser.id, email: savedUser.email, firstName: savedUser.firstName };
       const token = this.jwtService.sign(confirmUser, {
         secret: process.env.JWT_SECRET,
         expiresIn: '5m',
@@ -67,6 +73,26 @@ export class AuthService {
 
     // otherwise, run an update query on UserModel (i.e. User Table) and makes isVerified: true
     await this.userModel.update({ isVerified: true }, { where: { email: validatedUser.email } });
+
+    // now, get the default role = user and verify it against db
+    const role = await this.getRole(DEFAULT_ROLE);
+
+    if (role.id && validatedUser.id) {
+      await this.userRolesModel.create({ UserId: validatedUser.id, RoleId: role.id });
+      console.log('Role has been set to this verified user');
+    }
+  }
+
+  async getRole(roleTitle) {
+    return (
+      await this.roleModel.findOne({
+        where: {
+          title: {
+            [Op.iLike]: `%${roleTitle}`,
+          },
+        },
+      })
+    )?.toJSON();
   }
 
   async generateTokenWhenLogin<T extends { id: string; email: string } = any>({ id, email }: T): Promise<LoginToken> {
@@ -107,7 +133,7 @@ export class AuthService {
 
     if (Object.keys(user).length) {
       const token = this.jwtService.sign(
-        { email: user.email, firstName: user.firstName },
+        { id: user.id, email: user.email, firstName: user.firstName },
         {
           secret: process.env.JWT_SECRET,
           expiresIn: '5m',
@@ -119,6 +145,8 @@ export class AuthService {
   }
 
   async resetPassword(token: string, password: string): Promise<void> {
+    // TODO: This should not only reset password but username as well
+    
     // decode just validate the token whereas verify decode token the after verifying the signature from token
     const validatedUser = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
 

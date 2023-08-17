@@ -71,7 +71,7 @@ export class AuthController {
   async resetPassword(@Query('token') resetToken: string, @Req() req: Request, @Res() res: Response) {
     try {
       await this.authService.resetPassword(resetToken, req.body.password || '');
-      res.json('implementing');
+      res.json({ message: 'You have successfully reset your credentials' });
     } catch (error) {
       res.status(error?.status || 500).json({ message: error?.message || 'Unable to process your request' });
     }
