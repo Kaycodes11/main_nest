@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
-import { KnexModule } from 'nest-knexjs';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { UsersHttpModule } from './users-http/users-http.module';
@@ -20,19 +19,7 @@ import { SharedModule } from './shared/shared.module';
       isGlobal: true,
       cache: true,
     }),
-    KnexModule.forRoot({
-      config: {
-        client: 'postgresql',
-        version: '14.2',
-        useNullAsDefault: true,
-        connection: {
-          host: '127.0.0.1',
-          user: 'postgres',
-          password: '123456',
-          database: 'recruitmentv2',
-        },
-      },
-    }),
+
     // now this "forRoot" is synchronous so the main thread will be blocked until this is done,
     // therefore, other modules after and subsequent code it e.g., UsersModule will have to wait
     // SequelizeModule.forRoot({
@@ -71,5 +58,4 @@ import { SharedModule } from './shared/shared.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

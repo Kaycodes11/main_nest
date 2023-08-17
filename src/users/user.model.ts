@@ -1,6 +1,5 @@
 import {
   AllowNull,
-  BeforeUpdate,
   BelongsToMany,
   Column,
   DataType,
@@ -76,11 +75,11 @@ export class UserModel extends Model {
   @Column({ defaultValue: false })
   isVerified: boolean;
 
-  @BeforeUpdate
-  static hashPasswordAtUpdate(instance: UserModel) {
+  // @BeforeUpdate
+  // static hashPasswordAtUpdate(instance: UserModel) {
     // this will be called whenever an (injected) instance is used/called
     // instance.password =
-  }
+  // }
 
   // One User hasMany Photo (s):
   @HasMany(() => PhotoModel, { foreignKey: 'userId' })
