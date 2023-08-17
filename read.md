@@ -28,8 +28,14 @@ e.g. npx sequelize db:migrate --name 20230817044713-create-userRole.js
 
 ## The way to remove from db is to either undo all or specific file as below:
 
-# 1. npx sequelize-cli db:migrate:undo (down all)
+# 1. npx sequelize-cli db:migrate:undo (down the most recent migrations)
+npx sequelize-cli db:migrate:undo ( down / remove all migrated tables )
+
+https://fig.io/manual/sequelize/db:migrate:undo:all
 
 # 2. npx sequelize db:migrate:undo --name <migration_file_name.js> ( down specific )
 
 # npx sequelize-cli db:migrate:status (check status of migrations)
+
+
+https://dev.to/anayooleru/modifying-an-existing-sequelize-migration-1mnn

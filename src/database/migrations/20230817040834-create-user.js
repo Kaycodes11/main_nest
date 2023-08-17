@@ -50,6 +50,22 @@ module.exports = {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
+
+      createdAt: {
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
+      },
+
+      updatedAt: {
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
+      },
+      deletedAt: {
+        type: Sequelize.DataTypes.DATE,
+        defaultValue: null,
+      },
     });
   },
 

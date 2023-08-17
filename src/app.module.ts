@@ -42,7 +42,7 @@ import { SharedModule } from './shared/shared.module';
         username: 'postgres',
         password: '123456',
         database: 'recruitmentv2',
-        logging: true,
+        logging: console.log,
         autoLoadModels: true,
         synchronize: true,
       }),

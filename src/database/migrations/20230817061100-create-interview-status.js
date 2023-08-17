@@ -10,8 +10,27 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
+      
       title: Sequelize.DataTypes.STRING,
+      
       type: Sequelize.DataTypes.STRING,
+      
+      createdAt: {
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
+      },
+
+      updatedAt: {
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
+      },
+
+      deletedAt: {
+        type: Sequelize.DataTypes.DATE,
+        defaultValue: null,
+      },
     });
   },
 

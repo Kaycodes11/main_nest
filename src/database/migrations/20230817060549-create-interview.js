@@ -26,6 +26,17 @@ module.exports = {
         type: Sequelize.DataTypes.ENUM(['HIGH', 'MEDIUM', 'LOW', 'NONE']),
         defaultValue: 'NONE',
       },
+      createdAt: {
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
+      },
+
+      updatedAt: {
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
+      },
     });
   },
 

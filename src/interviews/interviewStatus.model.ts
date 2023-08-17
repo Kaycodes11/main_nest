@@ -1,6 +1,7 @@
 import { AllowNull, Column, DataType, IsUUID, Model, PrimaryKey, Table } from 'sequelize-typescript';
 
-@Table({ modelName: 'InterviewStatus', freezeTableName: true, timestamps: false, paranoid: true })
+// paranoid: true ; wont't work if timestamps: false
+@Table({ modelName: 'InterviewStatus', freezeTableName: true, paranoid: true })
 export class InterviewStatusModel extends Model {
   @IsUUID('4')
   @AllowNull(false)
