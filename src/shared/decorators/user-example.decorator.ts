@@ -23,14 +23,14 @@ export const User2 = createParamDecorator((data: string, ctx: ExecutionContext) 
 });
 
 /*
-user.controller.ts
+path : src / users / user.controller.ts
 
 @Get()
 async findOne(@User() user: UserEntity) {
   console.log(user);
 }
 
-// once again, here @User decorator's decorator first argument could be literally any datatype
+-- once again, here @User decorator's first argument could be literally any datatype
 @Get()
 async findOne(
   @User(new ValidationPipe({ validateCustomDecorators: true })) user: UserEntity) {
@@ -49,6 +49,7 @@ async findOne(@User2('firstName') firstName: string) {
 // ## decorator composition helps to combine "multiple decorators" into a "single decorator" like below
 
 const roles = ['Manager', 'Interviewee', 'Interviewer', 'HR'];
+
 /*
 
 [path]: shared / decorators / auth.decorator.ts

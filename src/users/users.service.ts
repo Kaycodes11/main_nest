@@ -27,12 +27,21 @@ export class UsersService {
   }
 
   async assignRole(roles: any) {
-    for (let [index, value] of Object.values(roles).entries()) {
-      console.log('ASSIGN: ' + `{${roles.userId[index]}, ${roles.roleId[index]}}`);
-      await this.userRolesModel.findOrCreate({
-        where: { UserId: roles.userId[index], RoleId: roles.roleId[index] },
-        defaults: { UserId: roles.userId[index], RoleId: roles.roleId[index] },
-      });
+    // this is "unmanaged transaction" which requires to manual commit rollback
+    const t = await this.sequelize.transaction();
+    try {
+      for (let [index, value] of Object.values(roles).entries()) {
+        console.log('ASSIGN: ' + `{${roles.userId[index]}, ${roles.roleId[index]}}`);
+        await this.userRolesModel.findOrCreate({
+          where: { UserId: roles.userId[index], RoleId: roles.roleId[index] },
+          defaults: { UserId: roles.userId[index], RoleId: roles.roleId[index] },
+          transaction: t,
+        });
+      }
+      // If the execution reaches this line, no errors were thrown then commit the transaction.
+      await t.commit();
+    } catch (error) {
+      await t.rollback();
     }
   }
 }
