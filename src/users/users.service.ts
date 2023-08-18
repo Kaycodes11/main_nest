@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserModel } from './user.model';
 import { Sequelize } from 'sequelize-typescript';
+import { UserRole } from './userRole.model';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(UserModel) private userModel: typeof UserModel,
+    @InjectModel(UserRole) private userRolesModel: typeof UserRole,
     private sequelize: Sequelize,
   ) {}
 
@@ -24,7 +26,13 @@ export class UsersService {
     }
   }
 
-  async findAllBySequelize(): Promise<UserModel[]> {
-    return this.userModel.findAll();
+  async assignRole(roles: any) {
+    for (let [index, value] of Object.values(roles).entries()) {
+      console.log('ASSIGN: ' + `{${roles.userId[index]}, ${roles.roleId[index]}}`);
+      await this.userRolesModel.findOrCreate({
+        where: { UserId: roles.userId[index], RoleId: roles.roleId[index] },
+        defaults: { UserId: roles.userId[index], RoleId: roles.roleId[index] },
+      });
+    }
   }
 }

@@ -19,7 +19,7 @@ export class RolesGuard implements CanActivate {
     return requiredRoles.some((role) => user.roles?.includes(role));
   }
 
-// ## register it within provider
+// ## register it within any module and it will be available on every module (so no need import in any other module); just use it as @UseGuards(RolesGuard)
 
 providers: [
     {

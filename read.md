@@ -42,9 +42,16 @@ https://fig.io/manual/sequelize/db:migrate:undo:all
 create seed : npx sequelize-cli seed:generate --name seed-roles
 
 
-npx sequelize db:seed --name 20230817044713-create-userRole.js (specific seed)
+-- npx sequelize db:seed --name 20230817044713-create-userRole.js (specific seed = not working)
 
 
-seed all : npx sequelize-cli db:seed:all ( all seeds )
+-- seed all : npx sequelize-cli db:seed:all ( all seeds )
+
+-- npx sequelize-cli db:seed:all
+
+-- npx sequelize-cli db:seed:undo:all
 
 https://dev.to/anayooleru/modifying-an-existing-sequelize-migration-1mnn
+
+1 * 10  - 10 = 0, 10
+2 * 20  - 10 = 10, 20

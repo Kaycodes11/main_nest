@@ -50,7 +50,7 @@ export class RolesGuard implements CanActivate {
         }
     
     */
-    return matchRoles(roles, user.roles);
+    return matchRoles(roles, user.roles); // this method will do anything then return boolean
 
   }
 }
@@ -74,7 +74,5 @@ export const Roles = (...roles: string[]) => SetMetadata('roles', roles); // thi
 async create(@Body() createCatDto: CreateCatDto) {
   this.catsService.create(createCatDto);
 }
-
-
 
 ```

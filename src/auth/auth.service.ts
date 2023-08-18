@@ -27,6 +27,8 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
+  // TODO: adding transaction and adding dto
+
   async doesUserAlreadyExist(email: string): Promise<boolean> {
     const user = await this.userModel.findOne({ where: { email: email } });
     if (!user) {
@@ -78,7 +80,17 @@ export class AuthService {
     const role = await this.getRole(DEFAULT_ROLE);
 
     if (role.id && validatedUser.id) {
-      await this.userRolesModel.create({ UserId: validatedUser.id, RoleId: role.id });
+      // The where option is for finding the entry, and the defaults option is used to define what must be created in case nothing was found.
+      await this.userRolesModel.findOrCreate({
+        where: {
+          RoleId: role.id,
+          UserId: validatedUser.id,
+        },
+        defaults: {
+          RoleId: role.id,
+          UserId: validatedUser.id,
+        },
+      });
       console.log('Role has been set to this verified user');
     }
   }
@@ -146,7 +158,7 @@ export class AuthService {
 
   async resetPassword(token: string, password: string): Promise<void> {
     // TODO: This should not only reset password but username as well
-    
+
     // decode just validate the token whereas verify decode token the after verifying the signature from token
     const validatedUser = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
 

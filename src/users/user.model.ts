@@ -37,20 +37,21 @@ export class UserModel extends Model {
   @Column
   lastName: string;
 
-  // @Column(DataType.VIRTUAL)
-  // get desc(): string {
-  //   return `${this.getDataValue('firstName')} ${this.getDataValue('lastName')}`;
-  // }
-
-  // set desc(value: string) {
-  //   // this.setDataValue('description', value);
-  //   throw new Error('This action is not allowed from here');
-  // }
-
   @IsEmail
   @AllowNull(false)
   @Column
   email: string;
+
+  @Column({
+    type: DataType.VIRTUAL,
+    get() {
+      return `${this.getDataValue('firstName')} ${this.getDataValue('lastName')}`;
+    },
+    set(value: string) {
+      throw new Error('This action is not allowed');
+    },
+  })
+  fullName: string;
 
   @AllowNull(false)
   @Column({
@@ -77,8 +78,8 @@ export class UserModel extends Model {
 
   // @BeforeUpdate
   // static hashPasswordAtUpdate(instance: UserModel) {
-    // this will be called whenever an (injected) instance is used/called
-    // instance.password =
+  // this will be called whenever an (injected) instance is used/called
+  // instance.password =
   // }
 
   // One User hasMany Photo (s):

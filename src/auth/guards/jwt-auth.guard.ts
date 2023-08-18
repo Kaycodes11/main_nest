@@ -5,6 +5,8 @@ import { AuthGuard } from '@nestjs/passport';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {}
 
+// most likely this AuthGuard('jwt') has some global config which is why it doesn't need to be imported in any module to use it like @UseGuards(JwtAuthGuard)
+
 /*
 
 // ## if using @IsPublic() decorator then use below
