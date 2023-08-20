@@ -38,7 +38,7 @@ export class AuthService {
     }
   }
 
-  async registerWithEmailAndPassword(userMap: Record<string, any>): Promise<void> {
+  async registerWithEmailAndPassword(userMap: Record<string, any>, userRole: string): Promise<void> {
     const isUser = await this.doesUserAlreadyExist(userMap.email);
     if (isUser) throw new HttpException('Duplicate signup', HttpStatus.CONFLICT);
 
@@ -50,7 +50,7 @@ export class AuthService {
 
     //  now send the confirmation email
     if (savedUser) {
-      const confirmUser = { id: savedUser.id, email: savedUser.email, firstName: savedUser.firstName };
+      const confirmUser = { id: savedUser.id, email: savedUser.email, firstName: savedUser.firstName, userRole: userRole };
       const token = this.jwtService.sign(confirmUser, {
         secret: process.env.JWT_SECRET,
         expiresIn: '5m',
@@ -77,10 +77,10 @@ export class AuthService {
     await this.userModel.update({ isVerified: true }, { where: { email: validatedUser.email } });
 
     // now, get the default role = user and verify it against db
-    const role = await this.getRole(DEFAULT_ROLE);
+    const role = await this.getRole(validatedUser.userRole || DEFAULT_ROLE);
 
     if (role.id && validatedUser.id) {
-      // The where option is for finding the entry, and the defaults option is used to define what must be created in case nothing was found.
+      // If the user already exist then return that [data, status] otherwise create
       await this.userRolesModel.findOrCreate({
         where: {
           RoleId: role.id,
@@ -91,7 +91,7 @@ export class AuthService {
           UserId: validatedUser.id,
         },
       });
-      console.log('Role has been set to this verified user');
+      console.log('The default role has been set to this verified user');
     }
   }
 

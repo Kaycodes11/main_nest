@@ -1,29 +1,22 @@
-import {
-  Controller,
-  UseGuards,
-  Body,
-  Post,
-  Req,
-  Res,
-  Patch,
-  HttpCode,
-  HttpStatus,
-  Put,
-  Query,
-  Get,
-} from '@nestjs/common';
+import { Controller, UseGuards, Post, Req, Res, Patch, HttpCode, HttpStatus, Put, Query, Get } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { DEFAULT_ROLE } from './constant';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  async registerWithEmailAndPassword(@Req() req: Request, @Res() res: Response): Promise<void> {
+  async registerWithEmailAndPassword(
+    @Query('userType') userType = DEFAULT_ROLE,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
     try {
-      await this.authService.registerWithEmailAndPassword(req.body);
+      // TODO: instead of taking userType = "interviewee" or "interviewer"; do userType = "1" or "2"
+      await this.authService.registerWithEmailAndPassword(req.body, userType);
 
       res.json({
         message: 'Registration successful, kindly check your email for confirmation link',

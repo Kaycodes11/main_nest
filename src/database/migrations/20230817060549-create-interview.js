@@ -26,6 +26,46 @@ module.exports = {
         type: Sequelize.DataTypes.ENUM(['HIGH', 'MEDIUM', 'LOW', 'NONE']),
         defaultValue: 'NONE',
       },
+
+      intervieweeId: {
+        type: Sequelize.DataTypes.UUID,
+        references: {
+          model: {
+            tableName: 'Users',
+            schema: 'public',
+          },
+          key: 'id',
+        },
+        allowNull: false,
+        onDelete: 'CASCADE',
+      },
+
+      jobId: {
+        type: Sequelize.DataTypes.UUID,
+        references: {
+          model: {
+            tableName: 'Jobs',
+            schema: 'public',
+          },
+          key: 'id',
+        },
+        allowNull: false,
+        onDelete: 'CASCADE',
+      },
+
+      interviewStatusId: {
+        type: Sequelize.DataTypes.UUID,
+        references: {
+          model: {
+            tableName: 'InterviewStatus',
+            schema: 'public',
+          },
+          key: 'id',
+        },
+        // allowNull: false,
+        onDelete: 'SET NULL',
+      },
+
       createdAt: {
         type: Sequelize.DataTypes.DATE,
         allowNull: false,
@@ -41,6 +81,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Interviews');
+    return queryInterface.dropTable('Interviews', { force: true });
   },
 };

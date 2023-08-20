@@ -10,7 +10,10 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      instruction: Sequelize.DataTypes.STRING,
+      instruction: {
+        type: Sequelize.DataTypes.STRING,
+        defaultValue: 'Not provided'
+      },
       interviewId: {
         type: Sequelize.DataTypes.UUID,
         references: {
@@ -23,6 +26,20 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
       },
+
+      interviewerId: {
+        type: Sequelize.DataTypes.UUID,
+        references: {
+          model: {
+            tableName: 'Users',
+            schema: 'public',
+          },
+          key: 'id',
+        },
+        allowNull: false,
+        onDelete: 'CASCADE',
+      },
+
       createdAt: {
         type: Sequelize.DataTypes.DATE,
         allowNull: false,

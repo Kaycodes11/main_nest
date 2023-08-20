@@ -19,7 +19,14 @@ export class RolesGuard implements CanActivate {
     return requiredRoles.some((role) => user.roles?.includes(role));
   }
 
-// ## register it within any module and it will be available on every module (so no need import in any other module); just use it as @UseGuards(RolesGuard)
+// 1. just do this within any module and by default "it will apply to all routes" -> which is a problem
+// 2. since we don't want it to apply each and every routes ; thus use a public decorator
+
+// The @Public decorator simply
+
+// [path]:  src/ auth / auth.module.ts
+
+-- once, by doing this it will be apply to all routes so no need to export RolesGuard
 
 providers: [
     {
@@ -27,5 +34,20 @@ providers: [
       useClass: RolesGuard,
     },
   ],
+
+@Controller
+export class JobsController {
+
+  @UseGuards('No need to do it since RolesGuard will apply to all routes by default')
+  @IsPublic(ROLES_LEVEL.PUBLIC)
+  async fetchJobs() {}
+}
+
+## then just within RolesGuard; first, check if (requiredRoles === ROLES.LEVEL.PUBLIC) return true
+
+## since it applies to all routes by default 
+
+
+
 
 ```

@@ -1,40 +1,39 @@
 import {
   AllowNull,
+  BelongsTo,
   Column,
   DataType,
   Default,
+  ForeignKey,
   HasMany,
   HasOne,
-  IsUUID,
   Model,
-  PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 import { InterviewDetailModel } from './interviewDetail.model';
 import { InterviewQuestionModel } from './interviewQuestion.model';
 import { InterviewScheduleModel } from './interviewSchedule.model';
+import { JobModel } from 'src/jobs/job.model';
+import { InterviewStatusModel } from './interviewStatus.model';
+import { UserModel } from 'src/users/user.model';
 
 // type Priority = 'high' | 'medium' | 'low' | string;
 
 @Table({ modelName: 'Interview' })
 export class InterviewModel extends Model {
-  @IsUUID('4')
-  @AllowNull(false)
-  @PrimaryKey
-  @Column(DataType.UUID)
+  @Column({ type: DataType.UUID, allowNull: false, primaryKey: true, defaultValue: DataType.UUIDV4 })
   id: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: DataType.STRING, allowNull: false })
   title: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: DataType.STRING, allowNull: false })
   description: string;
 
-  @Column(DataType.TEXT)
+  @Column({ type: DataType.STRING, allowNull: false })
   category: string;
 
-  @Default('high')
-  @Column(DataType.STRING)
+  @Column({ type: DataType.ENUM('HIGH', 'MEDIUM', 'LOW', 'NONE'), defaultValue: 'NONE' })
   priority: string;
 
   // One Interview hasOne InterviewDetail
@@ -46,7 +45,28 @@ export class InterviewModel extends Model {
   interviewQuestions: InterviewQuestionModel[];
 
   // One Interview hasMany InterviewSchedule (s)
-  @HasMany(() => InterviewScheduleModel, 'interviewScheduleId')
-  // let's pick a row from Interview table e.g. id = 1; now against this id there could be many 'InterviewSchedules'
+  @HasMany(() => InterviewScheduleModel, 'interviewId')
   interviewSchedules: InterviewScheduleModel[];
+
+  @ForeignKey(() => JobModel)
+  @Column(DataType.UUID)
+  jobId: string;
+
+  // One Job hasMany Interview (s) so
+  @BelongsTo(() => JobModel, 'jobId')
+  jobIs: JobModel;
+
+  @ForeignKey(() => InterviewStatusModel)
+  @Column(DataType.UUID)
+  interviewStatusId: string;
+
+  @BelongsTo(() => InterviewStatusModel, 'interviewStatusId')
+  interviewStatus: InterviewStatusModel;
+
+  @ForeignKey(() => UserModel)
+  @Column(DataType.UUID)
+  intervieweeId: string;
+
+  @BelongsTo(() => UserModel, 'intervieweeId')
+  interviewee: UserModel;
 }

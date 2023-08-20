@@ -17,6 +17,8 @@ import * as bcrypt from 'bcrypt';
 import { UserRole } from './userRole.model';
 import { RoleModel } from './role.model';
 import { InterviewQuestionModel } from 'src/interviews/interviewQuestion.model';
+import { InterviewModel } from 'src/interviews/interview.model';
+import { InterviewScheduleModel } from 'src/interviews/interviewSchedule.model';
 
 type Gender = 'male' | 'female' | 'others';
 
@@ -85,6 +87,14 @@ export class UserModel extends Model {
   // One User hasMany Photo (s):
   @HasMany(() => PhotoModel, { foreignKey: 'userId' })
   photos: PhotoModel[];
+
+  // One User hasMany Interview (s)
+  @HasMany(() => InterviewModel, { foreignKey: 'intervieweeId' })
+  interviews: InterviewModel[];
+
+  // One User hasMany InterviewSchedule (s)
+  @HasMany(() => InterviewScheduleModel, { foreignKey: 'interviewerId' })
+  interviewSchedules: InterviewScheduleModel[];
 
   // One User (or Interviewee) hasMany InterviewQuestion (s)
   @HasMany(() => InterviewQuestionModel, { foreignKey: 'acceptedBy' })

@@ -1,31 +1,26 @@
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  IsUUID,
-  Model,
-  PrimaryKey,
-  Table,
-} from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, IsUUID, Model, Table } from 'sequelize-typescript';
 import { InterviewModel } from './interview.model';
+import { UserModel } from 'src/users/user.model';
 
 @Table({ modelName: 'InterviewSchedule', paranoid: true })
 export class InterviewScheduleModel extends Model {
-  @IsUUID('4')
-  @AllowNull(false)
-  @PrimaryKey
-  @Column(DataType.UUID)
+  @Column({ type: DataType.UUID, allowNull: false, primaryKey: true, defaultValue: DataType.UUIDV4 })
   id: string;
 
-  @Column(DataType.STRING)
+  @Column({type: DataType.STRING, defaultValue: 'Not provided'})
   instruction: string;
 
   @ForeignKey(() => InterviewModel)
   @Column(DataType.UUID)
-  interviewScheduleId: string;
+  interviewId: string;
 
-  @BelongsTo(() => InterviewModel, 'interviewScheduleId')
+  @BelongsTo(() => InterviewModel, 'interviewId')
   interview: InterviewModel;
+
+  @ForeignKey(() => UserModel)
+  @Column(DataType.UUID)
+  interviewerId: string;
+
+  @BelongsTo(() => UserModel, 'interviewerId')
+  interviewer: UserModel;
 }

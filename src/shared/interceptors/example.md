@@ -4,6 +4,8 @@
 
 # [ SCOPE ]: controller, handler/method, global
 
+# middleware -> guards -> interceptors -> pipes -> route handler
+
 # Request interceptor e.g. LoggingInterceptor
 
 ```ts
@@ -63,6 +65,8 @@ export class AppModule {}
 ```
 
 # Response interceptor e.g. TransformInterceptor: (don't use @Res() with it directly)
+
+NOTE: whether thrown error or return a response; it could be modified here through next.handle()
 
 ```ts
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';

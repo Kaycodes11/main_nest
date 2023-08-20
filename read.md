@@ -29,6 +29,7 @@ e.g. npx sequelize db:migrate --name 20230817044713-create-userRole.js
 ## The way to remove from db is to either undo all or specific file as below:
 
 # 1. npx sequelize-cli db:migrate:undo (down the most recent migrations)
+
 npx sequelize-cli db:migrate:undo ( down / remove all migrated tables )
 
 https://fig.io/manual/sequelize/db:migrate:undo:all
@@ -41,17 +42,14 @@ https://fig.io/manual/sequelize/db:migrate:undo:all
 
 create seed : npx sequelize-cli seed:generate --name seed-roles
 
-
--- npx sequelize db:seed --name 20230817044713-create-userRole.js (specific seed = not working)
-
+-- npx sequelize-cli db:seed --seed my-seeder-file.js (specifically seeding a file)
 
 -- seed all : npx sequelize-cli db:seed:all ( all seeds )
 
--- npx sequelize-cli db:seed:all
-
 -- npx sequelize-cli db:seed:undo:all
+-- npx sequelize-cli db:seed:undo --seed 20230819040951-seed-jobs.js
 
 https://dev.to/anayooleru/modifying-an-existing-sequelize-migration-1mnn
 
-1 * 10  - 10 = 0, 10
-2 * 20  - 10 = 10, 20
+1 _ 10 - 10 = 0, 10
+2 _ 20 - 10 = 10, 20

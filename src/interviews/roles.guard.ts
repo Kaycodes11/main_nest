@@ -3,10 +3,11 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ROLE_KEY, RoleLevel } from './roles.decorator';
 import { InjectModel } from '@nestjs/sequelize';
-import { UserModel } from './user.model';
-import { RoleModel } from './role.model';
-import { UserRole } from './userRole.model';
+
 import { Op } from 'sequelize';
+import { UserModel } from 'src/users/user.model';
+import { RoleModel } from 'src/users/role.model';
+import { UserRole } from 'src/users/userRole.model';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -22,11 +23,11 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    // console.log('requiredRoles: ', requiredRoles); // ["hr"]
+    console.log('requiredRoles: ', requiredRoles); // ["hr"]
 
     const { user } = context.switchToHttp().getRequest(); // get access to request object
 
-    // console.log('user: ', user); // get access to req.user which added due to JwtAuthGuard
+    console.log('user: ', user); // get access to req.user which added due to JwtAuthGuard
 
     return this.matchRoles(requiredRoles, user);
     // return true;
@@ -47,17 +48,13 @@ export class RolesGuard implements CanActivate {
           },
         },
 
-        // https://stackoverflow.com/questions/43419514/sequelize-join-models-include-many-to-many
-        // by default it does LEFT JOIN but with required true will INNER JOIN
-        // to create a right join, required: false, right: true
-        // where clause (if needed) can be added like through : { where: {}, attributes: [] }
         include: [{ model: RoleModel, required: true, through: { attributes: [] } }],
-        // include: { model: RoleModel, required: true, through: { attributes: [] } },
-        // include: RoleModel, // this will give from all tables here without excluding any colum
-        // plain: true,
       });
       // console.log('db:query_for_user: ', JSON.stringify(userInfo, null, 2));
-      if (Array.isArray(userInfo) && userInfo.length) return true;
+      if (Array.isArray(userInfo) && userInfo.length) {
+        console.log('RETURNING  TRUE');
+        return true;
+      }
       return false;
     } catch (error) {
       console.log('ROLE:ERROR: ', error.message);

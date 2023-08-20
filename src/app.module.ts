@@ -11,6 +11,7 @@ import { InterviewsModule } from './interviews/interviews.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { SharedModule } from './shared/shared.module';
+import { JobsModule } from './jobs/jobs.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { SharedModule } from './shared/shared.module';
     AuthModule,
     MailModule,
     SharedModule,
+    JobsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
